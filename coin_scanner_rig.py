@@ -67,7 +67,7 @@ STEPS_PER_SLOT = TOTAL_STEPS // NUM_SLOTS  # 25 steps per slot
 
 # Camera config
 CAM_TOP = 0    # /dev/video0
-CAM_BOTTOM = 1  # /dev/video1
+CAM_BOTTOM = 2  # /dev/video2
 CAM_WIDTH = 1280
 CAM_HEIGHT = 720
 
