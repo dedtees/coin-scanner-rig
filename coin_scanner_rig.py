@@ -373,6 +373,8 @@ def display_result(slot_num: int, result: Dict[str, Any]):
 # MAIN SCANNING LOOP
 # ============================================================================
 
+FORCE_CAPTURE = False
+
 def run_scan(denomination: str = "quarter"):
     """
     Main scanning loop.
@@ -399,8 +401,8 @@ def run_scan(denomination: str = "quarter"):
             for slot_in_rev in range(NUM_SLOTS):
                 slot += 1
 
-                # 1. Check if coin is present
-                if not hw.coin_detected():
+                # 1. Check if coin is present (skip if --force-capture)
+                if not FORCE_CAPTURE and not hw.coin_detected():
                     logger.info(f"Slot {slot}: empty — skipping")
                     hw.rotate_one_slot()
                     continue
@@ -531,7 +533,15 @@ if __name__ == "__main__":
         action="store_true",
         help="Run in simulation mode (no GPIO hardware required)",
     )
+    parser.add_argument(
+        "--force-capture",
+        action="store_true",
+        help="Capture every slot regardless of IR sensor (for testing without hardware)",
+    )
     args = parser.parse_args()
+
+    if args.force_capture:
+        globals()['FORCE_CAPTURE'] = True
 
     if args.simulate and ON_PI:
         # Force simulation even on a Pi
