@@ -184,8 +184,8 @@ class CameraController:
     def _init_cameras(self):
         """Open both camera streams."""
         if ON_PI:
-            self.cap_top = cv2.VideoCapture(CAM_TOP)
-            self.cap_bottom = cv2.VideoCapture(CAM_BOTTOM)
+            self.cap_top = cv2.VideoCapture(CAM_TOP, cv2.CAP_V4L2)
+            self.cap_bottom = cv2.VideoCapture(CAM_BOTTOM, cv2.CAP_V4L2)
 
             for cap, [w, h] in [
                 (self.cap_top, (CAM_WIDTH, CAM_HEIGHT)),
