@@ -185,17 +185,17 @@ class CameraController:
         """Open both camera streams."""
         if ON_PI:
             self.cap_top = cv2.VideoCapture(CAM_TOP, cv2.CAP_V4L2)
-            self.cap_bottom = cv2.VideoCapture(CAM_BOTTOM, cv2.CAP_V4L2)
+            if not self.cap_top.isOpened():
+                logger.error("Failed to open top camera!")
+            self.cap_top.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
+            self.cap_top.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
+            time.sleep(1)  # delay between camera opens for USB bandwidth
 
-            for cap, [w, h] in [
-                (self.cap_top, (CAM_WIDTH, CAM_HEIGHT)),
-                (self.cap_bottom, (CAM_WIDTH, CAM_HEIGHT)),
-            ]:
-                if cap is None or not cap.isOpened():
-                    logger.error("Failed to open camera!")
-                    continue
-                cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
-                cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
+            self.cap_bottom = cv2.VideoCapture(CAM_BOTTOM, cv2.CAP_V4L2)
+            if not self.cap_bottom.isOpened():
+                logger.error("Failed to open bottom camera!")
+            self.cap_bottom.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
+            self.cap_bottom.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
             logger.info("Cameras initialized")
         else:
             logger.info("[SIM] Cameras simulated (no real capture)")
